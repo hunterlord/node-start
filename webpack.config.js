@@ -1,10 +1,10 @@
 const webpack = require('webpack');
 const mode = process.env.NODE_ENV;
+const IS_PROD = mode === 'PROD';
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const css_loader_dev = [
-  {
+const css_loader_dev = [{
     loader: 'style-loader'
   },
   {
@@ -15,8 +15,7 @@ const css_loader_dev = [
   }
 ];
 
-const less_loader_use = [
-  {
+const less_loader_use = [{
     loader: 'style-loader',
     options: {
       sourceMap: true
@@ -49,11 +48,22 @@ const css_loader_prod = ExtractTextPlugin.extract([
 
 const import_options = [];
 
+const createFileName = name = 'bundle' => {
+  const filename = ['[name]'];
+  if (IS_PROD) {
+    filename.push('[hash]');
+  }
+  if (name) {
+    filename.push(`[${name}]`);
+  }
+  filename.push('js');
+  return filename.join('.');
+};
+
 let plugins = [
   new webpack.optimize.CommonsChunkPlugin({
     name: 'commons',
-    // filename: '[name].[hash].js',
-    filename: '[name].js',
+    filename: createFileName(false),
     chunks: ['main']
   }),
   new webpack.HotModuleReplacementPlugin(),
@@ -68,7 +78,14 @@ let css_loader_use = css_loader_dev;
 const hotLink =
   'webpack-hot-middleware/client?timeout=2000&overlay=false&reload=1';
 
-if (mode === 'PROD') {
+const createEntryLink = dir => {
+  const link = [];
+  if (IS_PROD) link.push(hotLink);
+  link.push(path.resolve(__dirname, dir));
+  return link;
+};
+
+if (IS_PROD) {
   plugins = [...plugins, new ExtractTextPlugin('styles.css')];
   css_loader_use = css_loader_prod;
 }
@@ -76,15 +93,10 @@ if (mode === 'PROD') {
 module.exports = {
   context: path.resolve(__dirname, 'app'),
   entry: {
-    site: [
-      // 'webpack-hot-middleware/client?reload=1',
-      hotLink,
-      path.resolve(__dirname, 'app/assets/js/site/index.js')
-    ]
+    site: createEntryLink('app/assets/js/site/index.js')
   },
   output: {
-    // filename: '[name].[hash].bundle.js',
-    filename: '[name].bundle.js',
+    filename: createFileName(),
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/assets/'
   },
@@ -94,10 +106,9 @@ module.exports = {
     //外网访问
     disableHostCheck: true
   },
-  devtool: 'inline-source-map',
+  devtool: IS_PROD ? 'eval' : 'inline-source-map',
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.css$/,
         use: css_loader_use
       },
@@ -122,8 +133,7 @@ module.exports = {
             presets: ['env'],
             plugins: [
               'transform-runtime',
-              'transform-class-properties',
-              ['import', import_options]
+              'transform-class-properties', ['import', import_options]
             ]
           }
         }

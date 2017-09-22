@@ -1,14 +1,19 @@
 {
   "apps" : [
     {
-      "name"        : "api",
+      "name"        : "dev",
       "script"      : "./app/index.js",
       "watch"       : true,
       "ignoreWatch" : ["node_modules"],
       "env": {
         "NODE_ENV": "DEV"
-      },
-      "env_production" : {
+      }
+    },
+    {
+      "name" : "prod",
+      "script" : "./src/app/index.js",
+      "watch" : false,
+      "env": {
         "NODE_ENV": "PROD"
       }
     }
