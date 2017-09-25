@@ -104,6 +104,7 @@ module.exports = {
   devServer: {
     contentBase: path.join(__dirname, 'src/assets'),
     compress: true,
+    https: true,
     hot: true,
     disableHostCheck: true
   },

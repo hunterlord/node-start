@@ -6,6 +6,7 @@
   "scripts": {
     "start": "pm2 start process.config.js --only front-dev && pm2 start process.config.js --only server-dev",
     "start-prod": "npm run build && pm2 start process.config.js --only server",
+    "start-sync": "browser-sync start --config bs-config.js",
     "build": "rm -rf ./dist && npm run build-assets && npm run build-server",
     "build-server": "babel src -d dist --copy-files",
     "build-assets": "cross-env NODE_ENV=PROD node ./node_modules/webpack/bin/webpack.js",
