@@ -9,5 +9,6 @@
       "production": {
         "presets": ["minify"]
       }
-    }
+    },
+    "ignore": ["src/dist", "src/assets"]
 }

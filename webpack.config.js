@@ -2,9 +2,14 @@ const webpack = require('webpack');
 const mode = process.env.NODE_ENV;
 const IS_PROD = mode === 'PROD';
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
-const css_loader_dev = [{
+console.log('MODE', mode);
+
+const css_loader_dev = [
+  {
     loader: 'style-loader'
   },
   {
@@ -15,7 +20,8 @@ const css_loader_dev = [{
   }
 ];
 
-const less_loader_use = [{
+const less_loader_use = [
+  {
     loader: 'style-loader',
     options: {
       sourceMap: true
@@ -48,67 +54,58 @@ const css_loader_prod = ExtractTextPlugin.extract([
 
 const import_options = [];
 
-const createFileName = name = 'bundle' => {
-  const filename = ['[name]'];
-  if (IS_PROD) {
-    filename.push('[hash]');
-  }
-  if (name) {
-    filename.push(`[${name}]`);
-  }
-  filename.push('js');
-  return filename.join('.');
-};
-
 let plugins = [
+  new CleanWebpackPlugin(['src/dist'], {
+    root: __dirname,
+    verbose: true
+  }),
   new webpack.optimize.CommonsChunkPlugin({
     name: 'commons',
-    filename: createFileName(false),
-    chunks: ['main']
+    filename: 'commons.[hash].js',
+    chunks: ['index']
   }),
-  new webpack.HotModuleReplacementPlugin(),
   new webpack.ProvidePlugin({
     'window.jQuery': 'jquery'
   }),
-  new webpack.optimize.ModuleConcatenationPlugin()
+  new webpack.optimize.ModuleConcatenationPlugin(),
+  new HtmlWebpackPlugin({
+    title: 'hunter webpack start demo',
+    filename: 'index.html',
+    template: path.join(__dirname, 'src/assets/views/index.ejs'),
+    chunks: ['commons', 'index']
+  })
 ];
 
 let css_loader_use = css_loader_dev;
 
-const hotLink =
-  'webpack-hot-middleware/client?timeout=2000&overlay=false&reload=1';
-
-const createEntryLink = dir => {
-  const link = [];
-  if (IS_PROD) link.push(hotLink);
-  link.push(path.resolve(__dirname, dir));
-  return link;
-};
-
 if (IS_PROD) {
   plugins = [...plugins, new ExtractTextPlugin('styles.css')];
   css_loader_use = css_loader_prod;
+} else {
+  plugins = [...plugins, new webpack.HotModuleReplacementPlugin()];
 }
 
 module.exports = {
-  context: path.resolve(__dirname, 'app'),
+  context: path.resolve(__dirname, 'src/assets'),
   entry: {
-    site: createEntryLink('app/assets/js/site/index.js')
+    index: './js/index.js'
   },
   output: {
-    filename: createFileName(),
-    path: path.resolve(__dirname, 'dist'),
-    publicPath: '/assets/'
+    filename: '[name].[hash].bundle.js',
+    path: path.resolve(__dirname, 'src/dist'),
+    publicPath: '/'
   },
   devServer: {
-    contentBase: path.join(__dirname, 'app/assets'),
-    // compress: true,
-    //外网访问
+    contentBase: path.join(__dirname, 'src/assets'),
+    compress: true,
+    hot: true,
     disableHostCheck: true
   },
-  devtool: IS_PROD ? 'eval' : 'inline-source-map',
+  // devtool: IS_PROD ? false : 'inline-source-map',
+  devtool: 'inline-source-map',
   module: {
-    rules: [{
+    rules: [
+      {
         test: /\.css$/,
         use: css_loader_use
       },
@@ -133,7 +130,8 @@ module.exports = {
             presets: ['env'],
             plugins: [
               'transform-runtime',
-              'transform-class-properties', ['import', import_options]
+              'transform-class-properties',
+              ['import', import_options]
             ]
           }
         }
@@ -142,7 +140,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      styles: path.resolve(__dirname, 'app/assets/css')
+      styles: path.resolve(__dirname, 'src/assets/css')
     }
   },
   plugins: plugins
