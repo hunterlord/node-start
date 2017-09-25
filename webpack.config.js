@@ -5,6 +5,8 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+// const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const MinifyPlugin = require('babel-minify-webpack-plugin');
 
 console.log('MODE', mode);
 
@@ -79,7 +81,11 @@ let plugins = [
 let css_loader_use = css_loader_dev;
 
 if (IS_PROD) {
-  plugins = [...plugins, new ExtractTextPlugin('styles.css')];
+  plugins = [
+    ...plugins,
+    new ExtractTextPlugin('styles.css'),
+    new MinifyPlugin()
+  ];
   css_loader_use = css_loader_prod;
 } else {
   plugins = [...plugins, new webpack.HotModuleReplacementPlugin()];
@@ -101,8 +107,7 @@ module.exports = {
     hot: true,
     disableHostCheck: true
   },
-  // devtool: IS_PROD ? false : 'inline-source-map',
-  devtool: 'inline-source-map',
+  devtool: IS_PROD ? false : 'inline-source-map',
   module: {
     rules: [
       {
@@ -127,7 +132,7 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['env'],
+            presets: ['env', 'minify'],
             plugins: [
               'transform-runtime',
               'transform-class-properties',

@@ -6,7 +6,7 @@
   }]],
     "plugins": ["transform-runtime", "transform-class-properties", "babel-plugin-transform-undefined-to-void"],
     "env": {
-      "production": {
+      "PROD": {
         "presets": ["minify"]
       }
     },
