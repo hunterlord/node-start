@@ -10,7 +10,7 @@
     "build": "rm -rf ./dist && npm run build-assets && npm run build-server",
     "build-server": "babel src -d dist --copy-files",
     "build-assets": "cross-env NODE_ENV=PROD node ./node_modules/webpack/bin/webpack.js",
-    "prepare": "npm i -g babel-cli babel pm2 cross-env"
+    "prepare": "npm i -g babel-cli babel pm2 cross-env browser-sync"
   },
   "author": "",
   "license": "ISC",
