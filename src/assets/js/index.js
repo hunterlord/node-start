@@ -1,23 +1,8 @@
-const { Map, fromJS } = require('immutable');
+import 'babel-polyfill';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-let states = fromJS({
-  byId: {},
-  allIds: [],
-  posts: {
-    count: 1,
-    list: [
-      {
-        author: 'fox'
-      }
-    ]
-  }
-});
+const Demo = <div>Simple Components</div>;
+const App = () => <div className="big"> Hello world , {Demo}</div>;
 
-let s2 = states.updateIn(['posts', 'list'], x =>
-  x.push(Map({ author: 'wolf' }))
-);
-
-console.log(states === s2);
-console.log(states.get('byId') === states.get('byId'));
-
-//curd
+ReactDOM.render(<App />, document.getElementById('app'));
