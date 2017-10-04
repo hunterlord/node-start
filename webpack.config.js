@@ -5,7 +5,6 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-// const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const MinifyPlugin = require('babel-minify-webpack-plugin');
 
 console.log('MODE', mode);
@@ -120,10 +119,6 @@ module.exports = {
         use: less_loader_use
       },
       {
-        test: /\.html/,
-        loader: 'art-template-loader'
-      },
-      {
         test: /\.(ttf|svg|woff2|otf|eot|woff|gif|png|jpg)$/,
         loader: 'file-loader'
       },
@@ -134,7 +129,7 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             babelrc: false,
-            presets: ['env', 'react'],
+            presets: ['env'],
             plugins: [
               'transform-runtime',
               'transform-class-properties',
