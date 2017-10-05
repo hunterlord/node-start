@@ -10,8 +10,8 @@ const POSTS = {
 };
 
 const RECENT_POSTS = {
-  LIST: '',
+  LIST: 'recent posts list',
   STATUS: makeStatus('recent posts')
 };
 
-export { POSTS };
+export { POSTS, RECENT_POSTS };
