@@ -1,39 +1,45 @@
-import { combineReducers } from 'redux';
+import {
+  combineReducers
+} from 'redux';
 import * as TYPES from './types';
-import { Map, fromJS } from 'immutable';
+import {
+  Map,
+  List
+} from 'immutable';
+const socket = require('socket.io-client');
 
-const posts = (
-  state = fromJS({
-    isFetch: false,
-    detail: {},
-    recentList: { isFetch: false, entries: {} }
+const chat = (
+  state = Map({
+    connection: null,
+    users: Map({
+      byId: Map(),
+      userIds: List()
+    }),
+    chats: Map({
+      list: List()
+    })
   }),
   action
 ) => {
   switch (action.type) {
-    case TYPES.POSTS.STATUS.REQUEST:
-      return state.set('isFetch', true);
-    case TYPES.POSTS.STATUS.FAILURE:
-      return state.set('isFecth', false).set('errmsg', action.payload);
-    case TYPES.POSTS.STATUS.SUCCESS:
-      return state.set('isFetch', false).set('detail', action.payload);
-    case TYPES.RECENT_POSTS.STATUS.REQUEST:
-      return state.setIn(['recentList', 'isFetch'], true);
-    case TYPES.RECENT_POSTS.STATUS.FAILURE:
-      return state
-        .setIn(['recentList', 'isFetch'], false)
-        .setIn(['recentList', 'errmsg'], action.payload);
-    case TYPES.RECENT_POSTS.STATUS.SUCCESS:
-      return state
-        .setIn(['recentList', 'isFetch'], false)
-        .updateIn(['recentList', 'entries'], entries =>
-          entries.set(action.payload.id, action.payload.title)
-        );
+    case TYPES.CHAT.CONNECT:
+      return state.set('connection', socket(action.payload.url));
+    case TYPES.CHAT.SEND_CHAT:
+    case TYPES.CHAT.RECIEVE_CHAT:
+      return state.updateIn(['chats', 'list'], list =>
+        list.push(action.payload)
+      );
+    case TYPES.CHAT.ADD_USER:
+      return state.updateIn(['users', 'byId'], byId =>
+        byId.set(action.payload.id, action.payload)
+      );
+    case TYPES.CHAT.REMOVE_USER:
+      return;
     default:
       return state;
   }
 };
 
 export default combineReducers({
-  posts
+  chat
 });

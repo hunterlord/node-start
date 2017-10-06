@@ -4,14 +4,12 @@ const makeStatus = x => ({
   SUCCESS: `${x} fetch success`
 });
 
-const POSTS = {
-  DETAIL: 'posts detail',
-  STATUS: makeStatus('posts')
+const CHAT = {
+  CONNECT: 'CONNETC CHAT SERVER',
+  ADD_USER: 'CHAT ADD USER',
+  REMOVE_USER: 'CHAT REMOVE USER',
+  SEND_CHAT: 'CHAT SEND CHAT',
+  RECIEVE_CHAT: 'CHAT RECIEVE CHAT'
 };
 
-const RECENT_POSTS = {
-  LIST: 'recent posts list',
-  STATUS: makeStatus('recent posts')
-};
-
-export { POSTS, RECENT_POSTS };
+export { CHAT };
