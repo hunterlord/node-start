@@ -1,16 +1,13 @@
-import {
-  combineReducers
-} from 'redux';
+import { combineReducers } from 'redux';
 import * as TYPES from './types';
-import {
-  Map,
-  List
-} from 'immutable';
-const socket = require('socket.io-client');
+import { Map, List } from 'immutable';
+
+let id = 0;
 
 const chat = (
   state = Map({
     connection: null,
+    nickname: null,
     users: Map({
       byId: Map(),
       userIds: List()
@@ -23,11 +20,18 @@ const chat = (
 ) => {
   switch (action.type) {
     case TYPES.CHAT.CONNECT:
-      return state.set('connection', socket(action.payload.url));
+      return state.set('connection', action.payload.connection);
+    case TYPES.CHAT.SET_USER:
+      return state.set('nickname', action.payload.nickname);
     case TYPES.CHAT.SEND_CHAT:
     case TYPES.CHAT.RECIEVE_CHAT:
       return state.updateIn(['chats', 'list'], list =>
-        list.push(action.payload)
+        list.push({
+          id: list.size,
+          text: action.payload.text,
+          nickname: action.payload.nickname,
+          checked: action.type === TYPES.CHAT.SEND_CHAT ? false : true
+        })
       );
     case TYPES.CHAT.ADD_USER:
       return state.updateIn(['users', 'byId'], byId =>

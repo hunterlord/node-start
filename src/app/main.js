@@ -18,7 +18,10 @@ app.use(
 const publicFiles = serve(path.join(__dirname, '../dist/'));
 publicFiles._name = 'static /dist';
 
-app.use(publicFiles).use(siteRouter.routes()).use(siteRouter.allowedMethods());
+app
+  .use(publicFiles)
+  .use(siteRouter.routes())
+  .use(siteRouter.allowedMethods());
 
 // build https server
 const options = {
@@ -29,11 +32,23 @@ const options = {
 const server = https.createServer(options, app.callback());
 
 const io = require('socket.io')(server);
-io.on('connection', function(client) {
-  console.log('connected.');
-  client.emit('hello', 'world');
-  client.on('event', function(data) {});
-  client.on('disconnect', function() {
+
+const faker = require('faker');
+const users = {};
+
+io.on('connection', socket => {
+  const user = {
+    nickname: faker.name.findName()
+  };
+  users[socket.id] = user;
+  socket.emit('join', user);
+
+  socket.on('send chat', msg => {
+    socket.broadcast.emit('receive chat', { msg, user });
+    socket.emit('send success', msg.id);
+  });
+
+  socket.on('disconnect', () => {
     console.log(`disconnect!`);
   });
 });
