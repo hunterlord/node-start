@@ -6,7 +6,7 @@ module.exports = {
       watch: ['./src/app'],
       ignoreWatch: ['node_modules'],
       env: {
-        NODE_ENV: 'DEVELOP'
+        NODE_ENV: 'development'
       }
     },
     {
@@ -14,7 +14,7 @@ module.exports = {
       script: './dist/app/index.js',
       watch: false,
       env: {
-        NODE_ENV: 'PROD'
+        NODE_ENV: 'production'
       }
     },
     {
@@ -22,7 +22,7 @@ module.exports = {
       script: './node_modules/webpack-dev-server/bin/webpack-dev-server.js',
       watch: false,
       env: {
-        NODE_ENV: 'DEVELOP'
+        NODE_ENV: 'development'
       }
     },
     {
@@ -31,7 +31,7 @@ module.exports = {
       autorestart: false,
       watch: false,
       env: {
-        NODE_ENV: 'PROD'
+        NODE_ENV: 'production'
       }
     }
   ],
