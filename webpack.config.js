@@ -136,7 +136,8 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['env', 'minify'],
+            babelrc: false,
+            presets: ['env'],
             plugins: [
               'transform-runtime',
               'transform-class-properties',
