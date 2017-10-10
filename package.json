@@ -1,6 +1,7 @@
 {
     "author": "",
     "dependencies": {
+        "faker": "^4.1.0",
         "koa": "^2.3.0",
         "koa-router": "^7.2.1",
         "koa-static": "^4.0.1",
@@ -10,7 +11,9 @@
         "react-redux": "^5.0.6",
         "redux": "^3.7.2",
         "redux-logger": "^3.0.6",
-        "redux-thunk": "^2.2.0"
+        "redux-thunk": "^2.2.0",
+        "socket.io": "^2.0.3",
+        "socket.io-client": "^2.0.3"
     },
     "description": "nodejs es6 base fast start",
     "devDependencies": {
@@ -48,9 +51,9 @@
     "name": "node-start",
     "scripts": {
         "build": "rm -rf ./dist && npm run build-assets && npm run build-server",
-        "build-assets": "cross-env NODE_ENV=PROD node ./node_modules/webpack/bin/webpack.js",
+        "build-assets": "cross-env NODE_ENV=production node ./node_modules/webpack/bin/webpack.js",
         "build-server": "babel src -d dist --copy-files",
-        "prepare": "npmi-gbabel-clibabelpm2cross-envbrowser-sync",
+        "prepare": "npm i -g babel-cli babel pm2 cross-env browser-sync",
         "start": "npm run start-front && npm run start-server",
         "start-front": "pm2 start process.config.js --only front-dev",
         "start-prod": "npm run build && pm2 start process.config.js --only server",
