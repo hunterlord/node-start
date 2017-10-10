@@ -6,7 +6,7 @@ module.exports = {
       watch: ['./src/app'],
       ignoreWatch: ['node_modules'],
       env: {
-        NODE_ENV: 'DEVELOP'
+        NODE_ENV: 'development'
       }
     },
     {
@@ -14,7 +14,7 @@ module.exports = {
       script: './dist/app/index.js',
       watch: false,
       env: {
-        NODE_ENV: 'PROD'
+        NODE_ENV: 'production'
       }
     },
     {
@@ -22,7 +22,7 @@ module.exports = {
       script: './node_modules/webpack-dev-server/bin/webpack-dev-server.js',
       watch: false,
       env: {
-        NODE_ENV: 'DEVELOP'
+        NODE_ENV: 'development'
       }
     },
     {
@@ -31,16 +31,16 @@ module.exports = {
       autorestart: false,
       watch: false,
       env: {
-        NODE_ENV: 'PROD'
+        NODE_ENV: 'production'
       }
     }
   ],
   deploy: {
     production: {
-      user: 'ec2-user',
+      user: 'user',
       key: '~/.ssh/id_rsa',
       // Multi host in a js array
-      host: ['54.250.171.165'],
+      host: ['127.0.0.1'],
       ref: 'origin/master',
       repo: 'git@github.com:hunterlord/node-start.git',
       path: '~/node/node-start',

@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 const mode = process.env.NODE_ENV;
-const IS_PROD = mode === 'PROD';
+const IS_PROD = mode === 'production';
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -83,6 +83,9 @@ let css_loader_use = css_loader_dev;
 if (IS_PROD) {
   plugins = [
     ...plugins,
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(mode || 'development')
+    }),
     new ExtractTextPlugin('styles.css'),
     new MinifyPlugin()
   ];
