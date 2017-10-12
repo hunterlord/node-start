@@ -46,7 +46,7 @@
         "build": "rm -rf ./dist && npm run build-assets && npm run build-server",
         "build-assets": "cross-env NODE_ENV=production node ./node_modules/webpack/bin/webpack.js",
         "build-server": "babel src -d dist --copy-files",
-        "prepare": "npmi-gbabel-clibabelpm2cross-envbrowser-sync",
+        "prepare": "npm i -g babel-cli babel pm2 cross-env browser-sync",
         "start": "pm2 start process.config.js --only front-dev && pm2 start process.config.js --only server-dev",
         "start-prod": "npm run build && pm2 start process.config.js --only server",
         "start-sync": "browser-sync start --config bs-config.js"
