@@ -1,4 +1,6 @@
 import { combineReducers } from 'redux';
+import { routerReducer } from 'react-router-redux';
+
 import * as TYPES from './types';
 import { Map, List } from 'immutable';
 
@@ -45,5 +47,6 @@ const chat = (
 };
 
 export default combineReducers({
-  chat
+  chat,
+  router: routerReducer
 });
