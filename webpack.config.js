@@ -137,7 +137,7 @@ module.exports = {
               'transform-runtime',
               'transform-class-properties',
               'transform-react-jsx',
-              'transform-object-rest-spread'
+              'transform-object-rest-spread',
               ['import', import_options]
             ]
           }
