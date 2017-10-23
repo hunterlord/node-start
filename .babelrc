@@ -4,7 +4,7 @@
       "node": true
     }
   }]],
-    "plugins": ["transform-runtime", "transform-class-properties", "babel-plugin-transform-undefined-to-void"],
+    "plugins": ["transform-runtime", "transform-class-properties", "babel-plugin-transform-undefined-to-void", "transform-object-rest-spread"],
     "env": {
       "PROD": {
         "presets": ["minify"]
