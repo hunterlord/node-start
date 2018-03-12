@@ -7,8 +7,6 @@
 * [browser-sync](https://github.com/BrowserSync/browser-sync)
 * [pm2](https://github.com/Unitech/pm2)
 
-> 欢迎提出建议，不喜勿喷
-
 #### 简单描述
 
 * 前端热加载
